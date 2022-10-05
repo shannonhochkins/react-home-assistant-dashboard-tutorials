@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "jsx": "react",
+    "types": ["node"],
+    "baseUrl": ".",
+    "paths": {
+      "@root": ["src"],
+      "@hass": ["src/hass/"]
+    }
+  },
+  "include" : ["src"],
+  "exclude": [
+    "**/.parcel-cache",
+    "**/dist",
+    "node_modules"
+  ]
+}

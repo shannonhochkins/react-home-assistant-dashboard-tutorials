@@ -1,0 +1,31 @@
+{
+  "name": "part-1",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "NODE_ENV=production parcel build src/index.html",
+    "start": "NODE_ENV=development parcel src/index.html"
+  },
+  "alias": {
+    "@root": "./src",
+    "@hass": "./src/hass/"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@types/lodash": "^4.14.186",
+    "@types/node": "^18.8.2",
+    "home-assistant-js-websocket": "^8.0.0",
+    "lodash": "^4.17.21",
+    "parcel": "^2.7.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "typescript": "^4.8.4"
+  },
+  "devDependencies": {
+    "process": "^0.11.10"
+  }
+}
