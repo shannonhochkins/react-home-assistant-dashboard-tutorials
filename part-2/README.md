@@ -9,5 +9,5 @@ What we cover:
 3. Setting up some hooks to call service like toggling a switch or setting color temperature for a light
 4. Throttling the updates so we're not upating constantly with all updates from HA and just taking the latest updates.
 
-YouTube Tutorial: https://youtu.be/LMGadyIFFPk
+YouTube Tutorial: https://youtu.be/mpAOknmd2rI
 
