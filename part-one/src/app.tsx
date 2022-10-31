@@ -7,7 +7,7 @@ import { Hass } from '@hass';
 const App = () => {
   return <>
     <Hass>
-      Hello chickens
+      <div>Hello chickens</div>
     </Hass>
     
   </>;

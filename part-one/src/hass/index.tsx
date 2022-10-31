@@ -1,4 +1,4 @@
-import React, { useEffect, useState, ReactNode } from 'react';
+import React, { FC, useEffect, useState, ReactElement } from 'react';
 import {
   getAuth,
   createConnection,
@@ -29,18 +29,18 @@ function getAuthOptions(): AuthOptions {
 }
 
 interface HassProps {
-  children: ReactNode
+  children: ReactElement
 }
 
 export const Hass = ({
   children
-}: HassProps) => {
+}: HassProps): ReactElement => {
 
   let auth: Auth | null = null;
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
-    let unsubscribe: UnsubscribeFunc;
+    let unsubscribe: UnsubscribeFunc | null = null;
     async function authenticate() {
       try {
         auth = await getAuth(getAuthOptions());
@@ -66,10 +66,10 @@ export const Hass = ({
     }
     authenticate();
 
-    if (unsubscribe) {
+    if (unsubscribe !== null) {
       return () => unsubscribe();
     }
   }, []);
 
-  return ready ? children : '...loading';
+  return ready ? children : (<div>...loading</div>);
 };
