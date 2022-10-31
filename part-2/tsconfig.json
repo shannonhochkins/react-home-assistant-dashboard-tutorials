@@ -12,9 +12,8 @@
     "baseUrl": ".",
     "paths": {
       "@root": ["src"],
-      "@hass": ["src/hass/"],
-      "@hooks": ["src/hooks/"],
-      "@areas": ["src/areas/"]
+      "@areas": ["src/Areas"],
+      "@hooks": ["src/hooks"]
     }
   },
   "include" : ["src/**/*"],

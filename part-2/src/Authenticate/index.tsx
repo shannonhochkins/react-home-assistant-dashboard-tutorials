@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState, ReactElement } from 'react';
+import React, { useEffect, ReactElement } from 'react';
 import {
   getAuth,
   createConnection,
@@ -8,6 +8,7 @@ import {
   ERR_HASS_HOST_REQUIRED,
   UnsubscribeFunc
 } from 'home-assistant-js-websocket';
+
 import { useHass } from '@hooks';
 
 const BASE_URL = 'http://homeassistant.local:8123';
@@ -29,19 +30,19 @@ function getAuthOptions(): AuthOptions {
   }
 }
 
-interface HassProps {
+interface AuthenticateProps {
   children: ReactElement
 }
 
-export const Hass = ({
+export const Authenticate = ({
   children
-}: HassProps): ReactElement => {
+}: AuthenticateProps): ReactElement => {
   const { setConnection, setEntities, ready } = useHass();
   let auth: Auth | null = null;
+  let unsubscribe: UnsubscribeFunc | null = null;
 
   useEffect(() => {
-    let unsubscribe: UnsubscribeFunc | null = null;
-    async function authenticate() {
+    (async function authenticate() {
       try {
         auth = await getAuth(getAuthOptions());
         if (auth.expired) {
@@ -58,22 +59,18 @@ export const Hass = ({
       const connection = await createConnection({
         auth
       });
-      // store the reference to the connection
       setConnection(connection);
       unsubscribe = subscribeEntities(connection, entities => {
-        // store the latest updated entities
         setEntities(entities);
       });
       if (location.search.includes('auth_callback=1')) {
         history.replaceState(null, '', location.pathname);
       }
-    }
-    authenticate();
-
+    }());
     if (unsubscribe !== null) {
       return () => unsubscribe();
     }
   }, []);
 
-  return ready ? children : (<div>...loading</div>);
+  return ready ? children : <>...loading</>;
 };

@@ -1,5 +1,5 @@
 {
-  "name": "part-one",
+  "name": "part-1",
   "version": "1.0.0",
   "description": "",
   "scripts": {
@@ -9,9 +9,8 @@
   },
   "alias": {
     "@root": "./src",
-    "@hass": "./src/hass/",
     "@hooks": "./src/hooks/",
-    "@areas": "./src/areas/"
+    "@areas": "./src/Areas/"
   },
   "keywords": [],
   "author": "",
@@ -21,7 +20,6 @@
     "lodash": "^4.17.21",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "recursive-diff": "^1.0.8",
     "zustand": "^4.1.3"
   },
   "devDependencies": {

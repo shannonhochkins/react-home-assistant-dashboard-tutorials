@@ -3,12 +3,8 @@ import {
   HassServiceTarget,
   callService,
   HassEntities,
-  Connection,
-} from "home-assistant-js-websocket";
-
-const THROTTLE_TIMEOUT = 100;
-
-type OnOffToggle = 'toggle' | 'turn_on' | 'turn_off';
+  Connection
+} from 'home-assistant-js-websocket';
 
 interface CallService {
   domain: string;
@@ -16,13 +12,14 @@ interface CallService {
   serviceData?: object;
   target: HassServiceTarget;
 }
-
 interface HassState {
-  ready: boolean,
+  ready: boolean;
   entities: null | HassEntities;
   setEntities: (entities: HassEntities) => void;
-  connection: Connection | null;
+  connection: null | Connection;
   setConnection: (connection: Connection) => void;
+  callSwitch: (entity: string, service?: string, serviceData?: object) => void;
+  callLight: (entity: string, service?: string, serviceData?: object) => void;
   callService: ({
     domain,
     service,
@@ -30,30 +27,54 @@ interface HassState {
     target
   }: CallService) => void;
 }
-
+const THROTTLE_TIMEOUT = 200;
 let timer = null;
 export const useHass = create<HassState>()((set, get) => ({
   connection: null,
-  ready: false,
   entities: null,
+  ready: false,
   setEntities: entities => {
     if (timer) {
       clearTimeout(timer);
     }
     timer = setTimeout(() => {
-      set(() => ({ entities, ready: true }))
+      set(() => ({ entities, ready: true }));
     }, THROTTLE_TIMEOUT);
   },
-  setConnection: connection => set(() => ({ connection })),
+  setConnection: (connection: Connection) => {
+    set(() => ({ connection }));
+  },
+  callSwitch: async (entity, service = 'toggle', serviceData) => {
+    const { callService } = get();
+    callService({
+      domain: 'switch',
+      service,
+      target: {
+        entity_id: entity
+      },
+      serviceData
+    });
+  },
+  callLight: async (entity, service = 'toggle', serviceData) => {
+    const { callService } = get();
+    callService({
+      domain: 'light',
+      service,
+      target: {
+        entity_id: entity
+      },
+      serviceData
+    });
+  },
   callService: async ({
     domain,
     service,
     serviceData,
     target
-  }) => {
+  }: CallService) => {
     const { connection, ready } = get();
     if (connection && ready) {
       await callService(connection, domain, service, serviceData, target);
     }
   }
-}));
+}))
