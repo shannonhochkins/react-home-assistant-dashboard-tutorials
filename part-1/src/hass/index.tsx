@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState, ReactElement } from 'react';
+import React, { useEffect, useState, ReactElement } from 'react';
 import {
   getAuth,
   createConnection,
@@ -41,7 +41,7 @@ export const Hass = ({
 
   useEffect(() => {
     let unsubscribe: UnsubscribeFunc | null = null;
-    async function authenticate() {
+    (async function authenticate() {
       try {
         auth = await getAuth(getAuthOptions());
         if (auth.expired) {
@@ -63,13 +63,11 @@ export const Hass = ({
       if (location.search.includes('auth_callback=1')) {
         history.replaceState(null, '', location.pathname);
       }
-    }
-    authenticate();
-
+    }());
     if (unsubscribe !== null) {
       return () => unsubscribe();
     }
   }, []);
 
-  return ready ? children : (<div>...loading</div>);
+  return ready ? children : <>...loading</>;
 };
