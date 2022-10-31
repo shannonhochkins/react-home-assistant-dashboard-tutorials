@@ -7,7 +7,8 @@ import {
   Auth,
   ERR_HASS_HOST_REQUIRED,
   UnsubscribeFunc
-} from 'home-assistant-js-websocket'
+} from 'home-assistant-js-websocket';
+import { useHass } from '@hooks';
 
 const BASE_URL = 'http://homeassistant.local:8123';
 
@@ -35,9 +36,8 @@ interface HassProps {
 export const Hass = ({
   children
 }: HassProps): ReactElement => {
-
+  const { setConnection, setEntities, ready } = useHass();
   let auth: Auth | null = null;
-  const [ready, setReady] = useState(false);
 
   useEffect(() => {
     let unsubscribe: UnsubscribeFunc | null = null;
@@ -58,8 +58,12 @@ export const Hass = ({
       const connection = await createConnection({
         auth
       });
-      unsubscribe = subscribeEntities(connection, entities => console.log('entities', entities));
-      setReady(true);
+      // store the reference to the connection
+      setConnection(connection);
+      unsubscribe = subscribeEntities(connection, entities => {
+        // store the latest updated entities
+        setEntities(entities);
+      });
       if (location.search.includes('auth_callback=1')) {
         history.replaceState(null, '', location.pathname);
       }
